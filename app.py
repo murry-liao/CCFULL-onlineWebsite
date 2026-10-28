@@ -277,10 +277,10 @@ def barrier_distribution_figure(rows: list[dict], experimental: list[dict] | Non
         figure.add_trace(go.Scatter(
             x=[row["energy_mev"] for row in rows],
             y=[row["barrier_distribution_mb_per_mev"] for row in rows],
-            mode="lines+markers",
+            mode="lines",
             name="Physical model D(E)",
             line={"color": "#111111", "width": 2.2},
-            marker={"color": "#111111", "size": 7, "symbol": "circle"},
+            #marker={"color": "#111111", "size": 7, "symbol": "circle"},
         ))
     if experimental:
         colors = ["#e69f00", "#009e73", "#56b4e9", "#d55e00"]
