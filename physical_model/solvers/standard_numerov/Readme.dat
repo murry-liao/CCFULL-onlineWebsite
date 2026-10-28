@@ -1,0 +1,8 @@
+这是一个 Fortran 90 Numerov 版本的 CCFULL 代码。
+
+转动靶核的输入行为：
+E2T, Beta2T, Beta4T, Beta6T, NrotT
+
+旧的四字段输入 E2T, Beta2T, Beta4T, NrotT 仍然可用，并自动取
+Beta6T = 0。Beta6T 通过形变 Woods--Saxon 半径进入全阶核耦合，并通过
+线性 Y60 项进入库仑耦合。Hagino 原始 Fortran 77 源码没有修改。

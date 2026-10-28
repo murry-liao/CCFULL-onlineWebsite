@@ -1,0 +1,6 @@
+physical_model/build/
+*.mod
+__pycache__/
+*.pyc
+.venv/
+.DS_Store
