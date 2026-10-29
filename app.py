@@ -24,7 +24,7 @@ from physical_model.interface.input_parser import input_text, parse_input
 
 ROOT = PROJECT_ROOT
 DEFAULT_INPUT_PATH = ROOT / "data" / "input_templates" / "o16_sm154.inp"
-BARRIER_DELTA_E = 3.33
+BARRIER_DELTA_E = 2.5
 
 st.set_page_config(
     page_title="CCFULL Workbench",
@@ -41,13 +41,14 @@ st.markdown(
     [data-testid="stHeader"] { background:transparent; }
     .block-container { max-width:1420px; padding-top:.65rem; padding-bottom:4rem; }
     .ccfull-hero { text-align:center; padding:.15rem 1rem .7rem; }
-    .ccfull-hero h1 { color:var(--cc-ink); font-size:clamp(2rem,4vw,3.15rem); font-weight:760; letter-spacing:-.045em; margin:.2rem 0 .45rem; }
+    .ccfull-hero h1 { color:var(--cc-ink); font-size:clamp(2rem,4vw,3.15rem); font-weight:760; letter-spacing:-.045em; margin:.2rem 0 .45rem; padding:.25rem 0 0; }
     .ccfull-hero p { color:var(--cc-muted); font-size:1.04rem; margin:0 auto; max-width:760px; }
     .panel-label { border-bottom:1px solid var(--cc-line); color:var(--cc-blue); font-size:.76rem; font-weight:760; letter-spacing:.13em; margin:0 0 1rem; padding:.1rem 0 .7rem; text-transform:uppercase; }
     [data-testid="stExpander"] { background:rgba(255,255,255,.88); border-color:var(--cc-line); border-radius:.95rem; }
     [data-testid="stMetric"] { background:rgba(255,255,255,.88); border:1px solid var(--cc-line); border-radius:.9rem; min-height:7rem; padding:.9rem 1rem; }
     [data-testid="stMetricLabel"] { white-space:normal !important; overflow:visible !important; }
     [data-testid="stMetricValue"] { font-size:1.55rem !important; white-space:normal !important; overflow:visible !important; text-overflow:clip !important; }
+    [data-testid="stNumberInputStepUp"], [data-testid="stNumberInputStepDown"] { display:none; }
     div.stButton > button[kind="primary"] { background:linear-gradient(105deg,var(--cc-blue),#3277e5); border:none; }
     h1,h2,h3 { color:var(--cc-ink); }
     </style>
@@ -353,11 +354,8 @@ def render_physical_mode():
         base = parse_input(DEFAULT_INPUT_PATH)
         prefix = "phys"
 
-        system_tab, coupling_tab, numerical_tab = st.tabs([
-            "Reaction & Radii", "Couplings", "Potential & Grid"
-        ])
-        with system_tab:
-            st.subheader("Reaction System and Nuclear Radii")
+        with st.container(border=True):
+            # Reaction system and nuclear radii
             c = st.columns(4)
             apro = c[0].number_input("A_pro", min_value=1, value=base["apro"], step=1, key=prefix+"_apro")
             zpro = c[1].number_input("Z_pro", min_value=1, value=base["zpro"], step=1, key=prefix+"_zpro")
@@ -376,8 +374,7 @@ def render_physical_mode():
                                          format_func=lambda x: {-1: "-1 · inert", 0: "0 · vibration", 1: "1 · rotation"}[x],
                                          key=prefix+"_tmode")
 
-        with coupling_tab:
-            st.subheader("Coupling Parameters")
+            # Coupling parameters
             if target_mode == 1:
                 target1_labels = [
                     "E2T (MeV)", "Beta2T", "Beta4T", "Beta6T", "NrotT"]
@@ -440,8 +437,7 @@ def render_physical_mode():
                 prefix+"_p", projectile_int,
             )
 
-        with numerical_tab:
-            st.subheader("Transfer Coupling, Nuclear Potential, and Numerical Grid")
+            # Transfer coupling, nuclear potential and numerical grid
             c = st.columns(5)
             qtrans = c[0].number_input("Qtrans (MeV)", value=base["qtrans"], format="%.8g", key=prefix+"_q")
             ftr = c[1].number_input("Ftr", value=base["ftr"], format="%.8g", key=prefix+"_f")
